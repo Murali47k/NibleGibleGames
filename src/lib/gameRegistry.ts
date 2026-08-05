@@ -31,7 +31,7 @@ export const games: GameEntry[] = [
     tagline: "In the workshop",
     description: "Another weird one is being built. Check back later.",
     href: "#",
-    thumbnail: "/images/cactus-tall.png",
+    thumbnail: "/images/loading-spinner.png",
     tag: "SOON",
     comingSoon: true,
   },
