@@ -1,0 +1,20 @@
+{
+  "name": "my-games",
+  "private": true,
+  "version": "1.0.0",
+  "description": "A small arcade of weird, replayable browser games. No login, no database, just fun.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^0.10.14"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.8"
+  }
+}

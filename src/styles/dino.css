@@ -1,0 +1,177 @@
+.game-page main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem var(--gutter) 4rem;
+}
+
+.game-page h1 {
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  color: var(--amber);
+  margin: 0 0 0.5rem;
+}
+
+.game-page__intro {
+  color: var(--muted);
+  max-width: 60ch;
+  margin: 0 0 1.75rem;
+  font-size: 0.9rem;
+}
+
+/* The stage is a fixed 4:3-ish box so canvas math stays predictable
+   regardless of the player's webcam resolution. */
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 70vh;
+  background: #000;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255, 183, 3, 0.08), 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+}
+
+/* Video and canvas share one mirrored wrapper so the pose overlay stays
+   pixel-aligned with the camera feed instead of mirroring independently. */
+.mirror-wrap {
+  position: absolute;
+  inset: 0;
+  transform: scaleX(-1);
+}
+
+.mirror-wrap video,
+.mirror-wrap canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mirror-wrap video {
+  filter: saturate(0.85) contrast(1.05);
+}
+
+.mirror-wrap canvas {
+  pointer-events: none;
+}
+
+.hud {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: var(--amber);
+  background: rgba(13, 15, 18, 0.55);
+  border: 1px solid var(--line);
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--radius);
+  letter-spacing: 1px;
+}
+
+.hud span {
+  color: var(--text);
+}
+
+.stage-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1.1rem;
+  text-align: center;
+  padding: 2rem;
+  background: rgba(13, 15, 18, 0.86);
+  backdrop-filter: blur(2px);
+}
+
+.stage-overlay[hidden] {
+  display: none;
+}
+
+.stage-overlay h2 {
+  font-size: 1.1rem;
+  margin: 0;
+  color: var(--text);
+}
+
+.stage-overlay--gameover h2 {
+  color: var(--coral);
+}
+
+.stage-overlay p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  max-width: 40ch;
+}
+
+.stage-overlay .score-line {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--amber);
+}
+
+.btn {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  padding: 0.85rem 1.4rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  background: var(--mint);
+  color: #06251d;
+  transition: transform 0.12s ease, filter 0.12s ease;
+}
+
+.btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--text);
+}
+
+.stage-status {
+  position: absolute;
+  bottom: 0.9rem;
+  left: 0.9rem;
+  right: 0.9rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+  background: rgba(13, 15, 18, 0.55);
+  border: 1px solid var(--line);
+  padding: 0.4rem 0.65rem;
+  border-radius: var(--radius);
+}
+
+.how-to-play {
+  margin-top: 1.75rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.how-to-play__item {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+}
+
+.how-to-play__item h3 {
+  font-size: 0.75rem;
+  margin: 0 0 0.4rem;
+  color: var(--mint);
+}
+
+.how-to-play__item p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}

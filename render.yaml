@@ -1,0 +1,10 @@
+# Deploy target for Render's "Static Site" service.
+# Every page here is a real static HTML file (no client-side router), so no
+# SPA rewrite rule is needed -- Render serves each path directly from ./dist.
+services:
+  - type: web
+    name: my-games
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false

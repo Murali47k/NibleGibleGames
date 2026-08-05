@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyGames — a small arcade of weird games</title>
+    <meta
+      name="description"
+      content="A no-login, no-database arcade of odd little games built for fun. First up: IRL-DINO, played with your webcam."
+    />
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="site-header__brand" href="/index.html">
+        <img src="/images/favicon.png" alt="" width="28" height="28" />
+        MYGAMES
+      </a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="hero__eyebrow">CABINET ONLINE</p>
+        <h1>A garage full of games nobody asked for.</h1>
+        <p>
+          No accounts, no leaderboards, no database — just a handful of odd,
+          replayable games built for the fun of building them. Pick one and go.
+        </p>
+        <div class="hero__runner">
+          <img class="hero__sprite" src="/images/flying-dino.png" alt="" width="32" height="32" />
+        </div>
+      </section>
+
+      <h2 class="section-label">SELECT A CARTRIDGE</h2>
+      <div class="cabinet-grid" id="cabinet-grid"></div>
+    </main>
+
+    <footer class="site-footer">
+      Built for fun. No login, no tracking, no high-score table — just refresh to play again.
+    </footer>
+
+    <script type="module" src="/src/home.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,149 @@
+/* ============================================================
+   MyGames — design tokens
+   Direction: "garage cabinet" — a home-built arcade machine
+   wired up in someone's garage, not a slick studio product.
+   ============================================================ */
+
+@font-face {
+  font-family: "Press Start 2P";
+  src: local("Press Start 2P");
+  font-display: swap;
+}
+
+:root {
+  /* -- color -- */
+  --ink: #0d0f12;          /* page background */
+  --panel: #171a21;        /* card / surface background */
+  --panel-raised: #1f232c; /* hovered / raised surface */
+  --line: #2a2f3a;         /* hairline borders */
+  --text: #eef1f3;         /* primary text */
+  --muted: #8b93a1;        /* secondary text */
+  --amber: #ffb703;        /* marquee glow / primary accent */
+  --mint: #06d6a0;         /* go / play / success accent */
+  --coral: #ff5d73;        /* danger / game-over accent */
+
+  /* -- type -- */
+  --font-display: "Press Start 2P", "Courier New", monospace;
+  --font-body: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* -- layout -- */
+  --radius: 2px; /* almost square — this is a cabinet, not an app */
+  --gutter: clamp(1.25rem, 3vw, 3rem);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(255, 183, 3, 0.06), transparent 45%),
+    radial-gradient(circle at 85% 100%, rgba(6, 214, 160, 0.05), transparent 45%);
+  background-attachment: fixed;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+/* Visible keyboard focus everywhere — this is a keyboard/webcam-driven site */
+:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Shared site header used on every page */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem var(--gutter);
+  border-bottom: 1px solid var(--line);
+}
+
+.site-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.site-header__brand img {
+  image-rendering: pixelated;
+  width: 28px;
+  height: 28px;
+}
+
+.site-header__back {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-decoration: none;
+  border: 1px solid var(--line);
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.site-header__back:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.site-footer {
+  padding: 2rem var(--gutter) 3rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  text-align: center;
+  border-top: 1px solid var(--line);
+  margin-top: 4rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

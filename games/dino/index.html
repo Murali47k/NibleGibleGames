@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IRL-DINO — MyGames</title>
+    <meta
+      name="description"
+      content="Dodge flyers and cactuses with your real body, tracked live through your webcam."
+    />
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+  </head>
+  <body class="game-page">
+    <header class="site-header">
+      <a class="site-header__brand" href="/index.html">
+        <img src="/images/favicon.png" alt="" width="28" height="28" />
+        MYGAMES
+      </a>
+      <a class="site-header__back" href="/index.html">← Back to arcade</a>
+    </header>
+
+    <main>
+      <h1>IRL-DINO</h1>
+      <p class="game-page__intro">
+        Your webcam is the controller. A flyer swoops up top, cactuses sit low —
+        move your actual shoulders and hips to keep clear of them as they cross the screen.
+      </p>
+
+      <div class="stage" id="stage">
+        <div class="mirror-wrap">
+          <video id="camera" playsinline autoplay muted></video>
+          <canvas id="game-canvas"></canvas>
+        </div>
+
+        <div class="hud">
+          SCORE <span id="score-value">0</span>
+        </div>
+
+        <section class="stage-overlay" id="overlay-start">
+          <h2>Ready your webcam</h2>
+          <p>
+            This game needs camera access to track your body. Nothing is
+            recorded or sent anywhere — it all runs in this browser tab.
+          </p>
+          <button class="btn" id="btn-start">Enable camera &amp; play</button>
+        </section>
+
+        <section class="stage-overlay stage-overlay--gameover" id="overlay-gameover" hidden>
+          <h2>GAME OVER</h2>
+          <p class="score-line"><span id="final-score">0</span> dodged</p>
+          <button class="btn" id="btn-restart">Play again</button>
+        </section>
+
+        <p class="stage-status" id="stage-status" hidden>Loading pose model…</p>
+      </div>
+
+      <div class="how-to-play">
+        <div class="how-to-play__item">
+          <h3>STEP BACK</h3>
+          <p>Stand far enough back that your shoulders and hips are both fully in frame.</p>
+        </div>
+        <div class="how-to-play__item">
+          <h3>DUCK THE FLYER</h3>
+          <p>When it swoops in high, drop or lean to keep it clear of your shoulders.</p>
+        </div>
+        <div class="how-to-play__item">
+          <h3>DODGE THE CACTUS</h3>
+          <p>When it's low, shift your hips out of its path before it reaches you.</p>
+        </div>
+        <div class="how-to-play__item">
+          <h3>NO PRESSURE</h3>
+          <p>No login, no leaderboard. Miss one and just hit play again.</p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      Pose tracking runs entirely in your browser. Nothing is uploaded.
+    </footer>
+
+    <script type="module" src="/src/games/dino/main.ts"></script>
+  </body>
+</html>
