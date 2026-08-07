@@ -1,12 +1,16 @@
 import {
   SHOT_ORDER,
   SHOT_LABELS,
+  DELIVERY_ORDER,
+  DELIVERY_LABELS,
   type ShotKind,
+  type DeliveryKind,
   bowledOutLine,
   sixLine,
   fourLine,
   caughtOutLine,
   runLine,
+  runOutLine,
 } from "./commentary";
 
 export type Call = "odd" | "even";
@@ -20,11 +24,12 @@ export interface InningsResult {
 }
 
 export type BallOutcome =
-  | { kind: "bowled" }
+  | { kind: "bowled"; delivery: DeliveryKind }
   | { kind: "caught"; shot: ShotKind }
   | { kind: "six"; shot: ShotKind }
   | { kind: "four"; shot: ShotKind }
-  | { kind: "runs"; amount: 1 | 2 | 3 };
+  | { kind: "runs"; amount: 1 | 2 | 3 }
+  | { kind: "runout"; amount: 1 | 2 | 3 };
 
 export interface BallEvent {
   outcome: BallOutcome;
@@ -38,8 +43,8 @@ export interface LogLine {
   tone: "info" | "commentary" | "wicket" | "boundary" | "result";
 }
 
-export const WICKETS_PER_INNINGS = 3;
-export const MAX_BALLS_PER_INNINGS = 18; // a brisk 3-over dash, keeps a round short
+export const WICKETS_PER_INNINGS = 5;
+export const MAX_BALLS_PER_INNINGS = 60; // ten brisk overs, keeps a round short
 
 export type GamePhase =
   | "call-toss"
@@ -75,6 +80,14 @@ function randInt(min: number, max: number): number {
 function randomShot(): ShotKind {
   return SHOT_ORDER[randInt(0, SHOT_ORDER.length - 1)];
 }
+
+function randomDelivery(): DeliveryKind {
+  return DELIVERY_ORDER[randInt(0, DELIVERY_ORDER.length - 1)];
+}
+
+// Chance that a "runs" outcome instead becomes a run out while the
+// batsmen are scampering between the wickets.
+const RUN_OUT_CHANCE = 0.12;
 
 /**
  * ODD or EVEN — a self-contained, text-only hand-cricket engine.
@@ -213,14 +226,18 @@ export class OddOrEvenGame {
    * or the delivery (1-6) if the player is bowling. The opposing value is
    * simulated at random, exactly like the original prototype.
    */
-  playBall(choice: ShotKind): BallEvent {
+  playBall(choice: ShotKind | DeliveryKind): BallEvent {
     if (this.phase !== "innings") {
       throw new Error("Not currently in an innings");
     }
 
-    const shot: ShotKind = this.playerBatting ? choice : randomShot();
-    const delivery: ShotKind = this.playerBatting ? randomShot() : choice;
+    const shot: ShotKind = this.playerBatting ? (choice as ShotKind) : randomShot();
+    const delivery: DeliveryKind = this.playerBatting ? randomDelivery() : (choice as DeliveryKind);
     const power = randInt(0, 5);
+
+    // Shot and delivery are matched by index — same odds as the original
+    // "shot === delivery" comparison, now across two separate enums.
+    const isBeaten = SHOT_ORDER.indexOf(shot) === DELIVERY_ORDER.indexOf(delivery);
 
     let outcome: BallOutcome;
     let commentary: string;
@@ -228,14 +245,14 @@ export class OddOrEvenGame {
     let isWicket = false;
 
     if (power === 0) {
-      outcome = { kind: "bowled" };
-      commentary = bowledOutLine();
+      outcome = { kind: "bowled", delivery };
+      commentary = bowledOutLine(delivery);
       isWicket = true;
     } else if (power === 5) {
       outcome = { kind: "six", shot };
       commentary = sixLine(shot);
       runsScored = 6;
-    } else if (shot === delivery) {
+    } else if (isBeaten) {
       outcome = { kind: "caught", shot };
       commentary = caughtOutLine(shot);
       isWicket = true;
@@ -245,9 +262,17 @@ export class OddOrEvenGame {
       runsScored = 4;
     } else {
       const amount = power as 1 | 2 | 3;
-      outcome = { kind: "runs", amount };
-      commentary = runLine(amount);
-      runsScored = amount;
+      if (Math.random() < RUN_OUT_CHANCE) {
+        outcome = { kind: "runout", amount };
+        commentary = runOutLine(amount);
+        isWicket = true;
+        // The run out is still attempted, so the run(s) already completed count.
+        runsScored = amount;
+      } else {
+        outcome = { kind: "runs", amount };
+        commentary = runLine(amount);
+        runsScored = amount;
+      }
     }
 
     this.balls += 1;
@@ -255,7 +280,14 @@ export class OddOrEvenGame {
     if (isWicket) this.wickets += 1;
 
     const who = this.playerBatting ? "You" : "The computer";
+    const bowler = this.playerBatting ? "The computer" : "You";
     const shotLabel = SHOT_LABELS[shot];
+    const deliveryLabel = DELIVERY_LABELS[delivery];
+
+    this.push(
+      `${bowler} bowl${this.playerBatting ? "s" : ""} a ${deliveryLabel}.`,
+      "info"
+    );
     this.push(
       `${who} play${this.playerBatting ? "" : "s"} the ${shotLabel}.`,
       "info"
@@ -263,10 +295,9 @@ export class OddOrEvenGame {
     this.push(commentary, isWicket ? "wicket" : runsScored >= 4 ? "boundary" : "commentary");
 
     if (isWicket) {
-      this.push(
-        `${who === "You" ? "You're" : "The computer is"} out! ${runsScored ? `${runsScored} still counts.` : ""}`.trim(),
-        "wicket"
-      );
+      const outWho = this.playerBatting ? "You're" : "The computer is";
+      const dismissal = outcome.kind === "runout" ? "run out" : "out";
+      this.push(`${outWho} ${dismissal}!`, "wicket");
     }
 
     this.push(

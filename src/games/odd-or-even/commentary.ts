@@ -18,20 +18,68 @@ export const SHOT_LABELS: Record<ShotKind, string> = {
 
 export const SHOT_ORDER: ShotKind[] = ["hook", "cut", "coverDrive", "straightDrive", "pull", "sweep"];
 
+/**
+ * Deliveries a bowler can choose from. Kept as a separate, equal-length
+ * enum from ShotKind so the UI can show bowling-appropriate choices when
+ * the player is bowling, while the engine still matches shot-vs-delivery
+ * by index (mirrors the original odds).
+ */
+export type DeliveryKind = "yorker" | "bouncer" | "googly" | "inswinger" | "slowerBall" | "offCutter";
+
+export const DELIVERY_LABELS: Record<DeliveryKind, string> = {
+  yorker: "Yorker",
+  bouncer: "Bouncer",
+  googly: "Googly",
+  inswinger: "Inswinger",
+  slowerBall: "Slower Ball",
+  offCutter: "Off Cutter",
+};
+
+export const DELIVERY_ORDER: DeliveryKind[] = [
+  "yorker",
+  "bouncer",
+  "googly",
+  "inswinger",
+  "slowerBall",
+  "offCutter",
+];
+
 function pick(lines: string[]): string {
   return lines[Math.floor(Math.random() * lines.length)];
 }
 
-const BOWLED_OUT = [
-    "Oh, what a delivery! That one nipped back off the seam and crashed into the stumps. The batsman is walking back to the pavilion with a disappointed look on his face",
-    "A classic case of the bowler hitting the perfect length. The ball swung in late, beat the bat, and rattled the timber. The stumps are shattered, and the batsman's innings comes to an abrupt end.",
-    "You can see the excitement in the bowler's celebration. He's just produced a peach of a delivery that left the batsman absolutely no chance. The off-stump has been uprooted, and the bowler is on fire!",
-    "What a sight for the bowler! The bails go flying as the ball crashes into the stumps. The batsman played all around that one, and the bowler has struck gold. Pure jubilation in the field.",
-    "The bowler deceived the batsman with a clever change of pace. The batsman was caught off guard, played down the wrong line, and the stumps are rearranged. A crucial breakthrough for the bowling side.",
-    "Incredible scenes here as the bowler has completely bamboozled the batsman. The ball seamed away at the last moment, and the off-stump takes a walk. The bowler is delighted, and rightly so.",
-    "That delivery had venom in it! The batsman was comprehensively beaten by the pace and movement. The off-stump is sent cartwheeling, and the bowler is in absolute control of this contest.",
-    "Precision bowling at its best! The bowler hit the top of off-stump with surgical accuracy. The batsman had no answer to that one. The bowler is on a roll, and the wicket column keeps growing.",
-  ];
+const BOWLED_OUT_LINES: Record<DeliveryKind, string[]> = {
+  yorker: [
+    "A nailed yorker! Dead on the base of off-stump — the batsman had no room to dig it out, and the stumps are in pieces.",
+    "Toe-crushing yorker! It's full, it's fast, and it's absolutely unplayable. The batsman jams his bat down a fraction too late and the off-stump cartwheels away.",
+    "That's a searing yorker right into the blockhole! The batsman couldn't get his bat down in time, and the stumps have been rearranged.",
+  ],
+  bouncer: [
+    "Express pace, that one clocked well past 150kph! The batsman simply couldn't get his eyes in line, ducked into it, and the ball crashes onto the stumps.",
+    "Sheer speed does the damage! A vicious bouncer rearing up at 150kph — the batsman completely misjudges the bounce and is struck plumb through to the stumps.",
+    "That's raw pace! The bouncer skids through quicker than expected, the batsman is a fraction late on the pull, and the ball cannons into off-stump.",
+  ],
+  googly: [
+    "Beautifully disguised googly! The batsman reads it as the stock ball, plays down the wrong line entirely, and the ball sneaks through the gate to flatten the stumps.",
+    "What deception! The googly turns the other way, the batsman is completely foxed, and off-stump is sent cartwheeling.",
+    "Classic wrong'un! The batsman has no clue which way it's spinning, offers no shot, and the ball spins in sharply to clip the top of off-stump.",
+  ],
+  inswinger: [
+    "Beautiful inswinger! It shapes back in late, beats the inside edge, and crashes into the pads and stumps in one motion.",
+    "That's late, lethal swing! The ball nips back in from a good length, the batsman is squared up, and the stumps go flying.",
+    "The inswinger holds its line then darts back in at the last moment — the batsman plays outside the line and is bowled all ends up.",
+  ],
+  slowerBall: [
+    "Deceived completely by the change of pace! The batsman is through his shot far too early, and the slower ball trickles on to clip the stumps.",
+    "What a clever slower ball! The batsman commits early, the bat comes down well ahead of the ball, and off-stump is knocked back.",
+    "The slower ball does the trick — the batsman has no answer to the change in pace, drags his feet, and the stumps are shattered.",
+  ],
+  offCutter: [
+    "A wicked off-cutter grips and darts back sharply off the surface — the batsman is beaten for pace and the stumps are rattled.",
+    "That off-cutter holds its line and cuts back in off the seam, sneaking through bat and pad to castle the stumps.",
+    "Superb variation! The off-cutter slows on the batsman and turns back in, beating a hurried defensive prod to knock the stumps over.",
+  ],
+};
 
 const SIX_LINES: Record<ShotKind, string[]> = {
   hook: [
@@ -165,8 +213,26 @@ const RUN_LINES: Record<1 | 2 | 3, string[]> = {
   ],
 };
 
-export function bowledOutLine(): string {
-  return pick(BOWLED_OUT);
+const RUN_OUT_LINES: Record<1 | 2 | 3, string[]> = {
+  1: [
+    "Mix-up! The batsman set off for a quick single, sent back too late, and a direct hit from the fielder catches him well short. Run out!",
+    "Horrible mix-up between the wickets! There was never a single there, and the throw comes in flat and true to shatter the stumps. He's run out!",
+    "Hesitation costs him dear! A moment's indecision on that single, and the fielder swoops in, one stump to aim at, and hits it dead centre. Run out!",
+  ],
+  2: [
+    "Disaster while chasing the second run! The fielder chases it down in the deep, unleashes a rocket throw, and the batsman is well short of his ground. Run out!",
+    "They pushed hard for the second, but a brilliant piece of fielding and a bullet throw catch the batsman miles out of his crease. Run out!",
+    "Greedy running there — going for two when one was safer. The throw comes in on the money, and the batsman can't make his ground. Run out!",
+  ],
+  3: [
+    "Pushing hard for a third, but the fielder relays it in with interest, and the batsman dives but can't beat the throw. Run out!",
+    "A stunning piece of fielding in the deep! The batsman was never going to make it back for the third, and the stumps are broken clean. Run out!",
+    "Tired legs on that third run — the throw is collected and the bails are off before the batsman can complete his dive. Run out!",
+  ],
+};
+
+export function bowledOutLine(delivery: DeliveryKind): string {
+  return pick(BOWLED_OUT_LINES[delivery]);
 }
 
 export function sixLine(shot: ShotKind): string {
@@ -183,4 +249,8 @@ export function caughtOutLine(shot: ShotKind): string {
 
 export function runLine(runs: 1 | 2 | 3): string {
   return pick(RUN_LINES[runs]);
+}
+
+export function runOutLine(runs: 1 | 2 | 3): string {
+  return pick(RUN_OUT_LINES[runs]);
 }

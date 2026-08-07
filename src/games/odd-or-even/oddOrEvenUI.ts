@@ -1,5 +1,5 @@
 import { OddOrEvenGame, type GameSnapshot, type Role } from "./oddOrEvenGame";
-import { SHOT_LABELS, SHOT_ORDER, type ShotKind } from "./commentary";
+import { SHOT_LABELS, SHOT_ORDER, DELIVERY_LABELS, DELIVERY_ORDER } from "./commentary";
 
 export class OddOrEvenUI {
   private readonly game = new OddOrEvenGame();
@@ -160,16 +160,29 @@ export class OddOrEvenUI {
     const grid = document.createElement("div");
     grid.className = "control-grid";
 
-    SHOT_ORDER.forEach((shot: ShotKind, idx) => {
-      const btn = document.createElement("button");
-      btn.className = "choice-btn";
-      btn.innerHTML = `<span class="choice-btn__index">${idx + 1}</span>${SHOT_LABELS[shot]}`;
-      btn.addEventListener("click", () => {
-        this.game.playBall(shot);
-        this.render();
+    if (snap.playerBatting) {
+      SHOT_ORDER.forEach((shot, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "choice-btn";
+        btn.innerHTML = `<span class="choice-btn__index">${idx + 1}</span>${SHOT_LABELS[shot]}`;
+        btn.addEventListener("click", () => {
+          this.game.playBall(shot);
+          this.render();
+        });
+        grid.appendChild(btn);
       });
-      grid.appendChild(btn);
-    });
+    } else {
+      DELIVERY_ORDER.forEach((delivery, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "choice-btn";
+        btn.innerHTML = `<span class="choice-btn__index">${idx + 1}</span>${DELIVERY_LABELS[delivery]}`;
+        btn.addEventListener("click", () => {
+          this.game.playBall(delivery);
+          this.render();
+        });
+        grid.appendChild(btn);
+      });
+    }
 
     this.controlPanel.appendChild(grid);
   }
