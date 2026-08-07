@@ -1,0 +1,186 @@
+/**
+ * Commentary lines for ODD or EVEN, carried over from the original
+ * Commentary.py written for the hand-cricket prototype this game is based
+ * on. Grouped by outcome so the engine can pull a random, relevant line
+ * for whatever just happened on the pitch.
+ */
+
+export type ShotKind = "hook" | "cut" | "coverDrive" | "straightDrive" | "pull" | "sweep";
+
+export const SHOT_LABELS: Record<ShotKind, string> = {
+  hook: "Hook",
+  cut: "Cut Shot",
+  coverDrive: "Cover Drive",
+  straightDrive: "Straight Drive",
+  pull: "Pull Shot",
+  sweep: "Sweep",
+};
+
+export const SHOT_ORDER: ShotKind[] = ["hook", "cut", "coverDrive", "straightDrive", "pull", "sweep"];
+
+function pick(lines: string[]): string {
+  return lines[Math.floor(Math.random() * lines.length)];
+}
+
+const BOWLED_OUT = [
+    "Oh, what a delivery! That one nipped back off the seam and crashed into the stumps. The batsman is walking back to the pavilion with a disappointed look on his face",
+    "A classic case of the bowler hitting the perfect length. The ball swung in late, beat the bat, and rattled the timber. The stumps are shattered, and the batsman's innings comes to an abrupt end.",
+    "You can see the excitement in the bowler's celebration. He's just produced a peach of a delivery that left the batsman absolutely no chance. The off-stump has been uprooted, and the bowler is on fire!",
+    "What a sight for the bowler! The bails go flying as the ball crashes into the stumps. The batsman played all around that one, and the bowler has struck gold. Pure jubilation in the field.",
+    "The bowler deceived the batsman with a clever change of pace. The batsman was caught off guard, played down the wrong line, and the stumps are rearranged. A crucial breakthrough for the bowling side.",
+    "Incredible scenes here as the bowler has completely bamboozled the batsman. The ball seamed away at the last moment, and the off-stump takes a walk. The bowler is delighted, and rightly so.",
+    "That delivery had venom in it! The batsman was comprehensively beaten by the pace and movement. The off-stump is sent cartwheeling, and the bowler is in absolute control of this contest.",
+    "Precision bowling at its best! The bowler hit the top of off-stump with surgical accuracy. The batsman had no answer to that one. The bowler is on a roll, and the wicket column keeps growing.",
+  ];
+
+const SIX_LINES: Record<ShotKind, string[]> = {
+  hook: [
+    "What a shot! The batsman picked the length early, swiveled on his back foot, and unleashed a thunderous hook shot. The ball soared high into the air, and it's gone all the way! Six runs! That was pure power and perfect timing.",
+    "Incredible batting display! The bowler thought he had the upper hand with the short-pitched delivery, but the batsman was up to the challenge. A lightning-quick pivot, a resounding crack of the bat, and the ball sails over the boundary for a maximum. That's the hook shot at its best!",
+    "Talk about audacity! The short ball was coming in at serious pace, but the batsman was equal to the task. He rocked back, unleashed the hook shot, and the ball disappears into the crowd. Six runs! The crowd is on its feet, and that shot will be etched in everyone's memory.",
+  ],
+  cut: [
+    "Oh, what a magnificent cut shot! The batsman opened up the face of the bat and slashed it through the off-side. The ball raced away to the boundary, and it's gone all the way! A perfectly timed cut shot for a delightful six.",
+    "Vintage batting on display here! The batsman rocked back onto the back foot, played the perfect cut shot, and sent the ball soaring into the stands. The fielders could only watch as it cleared the ropes effortlessly.",
+    "That's the class of a top-order batsman! The cut shot executed with such finesse, the ball seemed to have a GPS to find the gap in the field and sail over the boundary. A picturesque six, and the crowd erupts in appreciation.",
+  ],
+  coverDrive: [
+    "Oh, that's a shot of sheer elegance! The batsman leans into the cover drive, timing it to perfection. The ball races to the boundary, and it's a glorious sight as it clears the ropes for a maximum. Classic cricketing grace on display!",
+    "What a way to bring up the fifty! The batsman showcasing textbook technique with a sublime cover drive. The ball races through the gap, and it's a maximum! The fielders can only watch as the ball sails over the boundary. A shot that's pure poetry in motion!",
+    "Talk about timing! The batsman effortlessly glides the ball through the covers, and it's gone all the way! That's not just a six; it's a statement. The crowd is on their feet, applauding a shot that exemplifies the beauty of the game. Simply magnificent!",
+  ],
+  straightDrive: [
+    "That's pure elegance from the batsman! The straight drive was so perfectly executed; it's as if the bat was a conductor's wand, directing the ball straight down the ground and into the stands for a maximum. What a shot!",
+    "This is cricketing poetry in motion! The batsman has just unfurled a majestic straight drive. The timing, the placement, everything about that shot was spot-on. The bowler had no chance, and the ball sails away for a magnificent six.",
+    "Crack! The sound of the ball meeting the bat was sweet, and the result is even sweeter. The batsman has dispatched that delivery with authority, sending it straight back over the bowler's head for a colossal six. What a way to assert dominance!",
+  ],
+  pull: [
+    "Oh, what a magnificent pull shot! The batsman picked up the length early, rocked onto the back foot, and dispatched it into the stands with authority. That's a maximum, a towering six!",
+    "Cracking shot! The short-pitched delivery was asking for trouble, and the batsman was up for the challenge. He swivels on the back foot, connects sweetly, and the ball sails over the boundary rope for a big six!",
+    "Look at the power and timing in that pull shot! The bowler banged it in short, but the batsman was up to the task. He rocked back, unleashed the pull, and the ball is lost in the crowd. Six runs, and the crowd erupts!",
+  ],
+  sweep: [
+    "What a daring sweep shot! The batsman read the line of the spinner beautifully, got down on one knee, and sent that ball soaring over the deep square leg boundary. That's not just a sweep; it's a statement!",
+    "Unbelievable skill on display! The batsman used the sweep shot to perfection, picking the length early and dispatching it into the stands. The crowd erupts as the ball sails effortlessly for a maximum. A textbook sweep gone big!",
+    "This is audacious cricket at its finest! The batsman took on the challenge, executed a powerful reverse sweep, and the ball disappears over the boundary. Six runs added to the scoreboard in the most stylish manner possible!",
+  ],
+};
+
+const FOUR_LINES: Record<ShotKind, string[]> = {
+  hook: [
+    "Oh, what a shot! The batsman picks up on the short-pitched delivery, swivels on the back foot, and dispatches it with authority. The ball races to the boundary like a tracer bullet. That's a textbook hook shot, and the fielders had no chance!",
+    "He's taken on the challenge of the baller, and my goodness, he's executed it to perfection! The batsman rocks back, unleashes a thunderous hook shot, and the ball rockets to the boundary. The fielders can only watch as it sails over the rope.",
+    "A daring move by the batsman, and it pays off in style! The short ball was begging to be hit, and the batsman obliges with a majestic hook shot. The timing is exquisite, and the ball races away to the fence. What a statement from the batsman!",
+  ],
+  cut: [
+    "What a magnificent cut shot! The batsman expertly rocks back onto his back foot, opens the face of the bat, and guides it through the gap. The ball races away to the boundary, and the fielders can only watch in awe.",
+    "Textbook stuff from the batsman! He picked the length early, got onto the back foot, and unleashed a perfectly executed cut shot. The timing was exquisite, and the ball races away to the boundary like a tracer bullet.",
+    "Oh, that's a shot of pure class! The batsman waited for the short and wide delivery, slashed hard with precision, and the ball races away square of the wicket for a delightful boundary. The fielders had no chance.",
+  ],
+  coverDrive: [
+    "What a delightful cover drive! The batsman leaned into the shot with perfect timing, the ball raced past the fielders, and the boundary fielder had no chance. Textbook cricket at its finest, and the crowd applauds the elegance on display.",
+    "Oh, that's a glorious shot! The batsman showcasing his class with a beautifully executed cover drive. The ball pierces the gap, and with impeccable timing, it races to the fence. The fielders can only watch as it reaches the boundary in no time.",
+    "Exquisite! The batsman showcasing his mastery with a sumptuous cover drive. The fielders are mere spectators as the ball caresses the turf on its way to the boundary. The crowd roars in appreciation for that picture-perfect shot.",
+  ],
+  straightDrive: [
+    "Oh, what a glorious shot! That straight drive was like a picture illustration. The bat came down straight as an arrow, meeting the ball perfectly. The fielders could only watch as it raced to the boundary for a classic four!",
+    "Absolutely exquisite! The batsman showcasing a masterclass in the art of the straight drive. The ball left the middle of the bat with such elegance, piercing the field and finding the rope. A boundary that oozed class and timing.",
+    "Talk about timing! The batsman just lent into that one and sent it straight down the ground. The bowler had no chance as it raced past like a tracer bullet, reaching the fence in a blink of an eye. Magnificent execution of the straight drive for a well-deserved four!",
+  ],
+  pull: [
+    "What a shot! The batsman rocked back onto the back foot, picked the length early, and unleashed a powerful pull shot. The ball raced to the boundary like a bullet train. The fielders had no chance, and that's a glorious four!",
+    "Oh, that's a majestic pull shot! The batsman saw the ball coming, swiveled on his back foot, and dispatched it to the mid-wicket boundary with authority. The timing was impeccable, and the result is a resounding four runs.",
+    "Talk about control! The batsman pulled that short delivery with absolute precision. The ball rocketed off the middle of the bat, and the fielders could only watch as it sped to the boundary. That's a insane pull shot, and the crowd is loving it!",
+  ],
+  sweep: [
+    "What a beautifully executed sweep shot! The batsman read the line of the ball perfectly, got down on one knee, and sent it racing to the square leg boundary. The timing was impeccable, and that's a delightful boundary.",
+    "Vintage stuff from the batsman! He saw the length early, got into position swiftly, and dispatched it to the fine leg boundary with finesse. The fielders had no chance, and the crowd is enjoying it.",
+    "That's a shot straight out of the coaching manual! The batsman went down on one knee and swept it fine. The placement was exquisite, beating the fielder at short fine leg. The ball races away, and the crowd is treated to a masterclass in the sweep shot.",
+  ],
+};
+
+const CAUGHT_OUT_LINES: Record<ShotKind, string[]> = {
+  hook: [
+    "Beautifully snatched! The fielder swiftly intercepts the hook shot, displaying impeccable reflexes and trapping the ball effortlessly.",
+    "Precision in the field! The hook shot is intercepted with finesse by the fielder, showcasing quick hands and a keen sense of anticipation.",
+    "Caught in the web! The fielder snares the hook shot, making it look like a routine catch with exceptional fielding skills on full display.",
+  ],
+  cut: [
+    "A textbook cut shot met with exceptional fielding precision! The fielder's quick reflexes and agility shine as they effortlessly snatch the ball mid-air, denying any chance for the batsman to capitalize on that well-executed shot.",
+    "A masterful cut shot finds an equally skilled opponent in the fielder. The athleticism displayed to catch that swift cut is commendable, turning a potential boundary into a showcase of defensive prowess",
+    "The cut shot had the potential to race away to the boundary, but the fielder had other plans. A stunning interception mid-air showcases not just athleticism, but a strategic anticipation that puts a halt to the batsman's intentions.",
+  ],
+  coverDrive: [
+    "Fantastic reflexes from the fielder! The cover drive seemed destined for the boundary, but a lightning-quick catch turns the tables. Precision in the field at its finest!",
+    "Caught at cover! A cover drive meets an exceptional fielding effort. The fielder's anticipation and quick hands make it look effortless. A key breakthrough for the bowling side!",
+    "Oh, what a catch! The cover drive appeared picture-perfect, but the fielder had other plans. A stunning grab at cover denies the batsman a boundary. Fielding brilliance on display!",
+  ],
+  straightDrive: [
+    "Caught at mid-off! A lofted straight drive, but the fielder was perfectly positioned to pluck it out of the air. That's a classic case of a well-executed shot finding an even better-placed fielder.",
+    "WOW, A magnificent a catch! The straight drive looked destined for the boundary, but the fielder at cover had other plans. A stunning reflex catch, and the batsman is left shaking his head in disbelief.",
+    "Straight down the ground, but straight into the hands of the fielder! A well-timed straight drive, but the fielder's anticipation and quick hands turn it into a wicket. Cricket can be so unforgiving at times.",
+  ],
+  pull: [
+    "The fielder showcased exceptional precision in grabbing that pull shot. The ball seemed destined for the boundary, but their quick reflexes and accurate positioning led to a crucial catch, turning the game in their team's favor.",
+    "That catch off the pull shot could be the turning point of the game. The fielder's commitment and composure under pressure were evident. A game-changing moment that highlights the impact of sharp fielding in cricket",
+    "An exquisite pull shot attempted, but the fielder leapt like a panther to snatch it out of the air a stunning catch that turned a potential boundary into a moment of brilliance.",
+  ],
+  sweep: [
+    "Sweep attempt thwarted! The fielder's lightning-fast reflexes intercept the edged sweep, denying the batsman any chance to score.",
+    "Edged and intercepted! The fielder makes a crucial intervention, grabbing the edged sweep with precision, showcasing exceptional fielding skills on the cricket field.",
+    "A close call for the batsman as the edged sweep flies towards the fielder. However, exceptional fielding skills come to the rescue, turning a potential boundary into a spectacular catch.",
+  ],
+};
+
+const RUN_LINES: Record<1 | 2 | 3, string[]> = {
+  1: [
+    "A quick single taken, and the batsman is off the mark with a cheeky run.",
+    "The batsman nudges it to the leg side, sprints through for a single",
+    "Just a gentle push into the covers, and the batsman picks up a single comfortably.",
+    "A well-timed flick to mid-wicket, and the batsman scampers through for a single.",
+    "The batsman plays it with soft hands, guides it to point, and grabs a single.",
+    "A single off the pads as the batsman works it to square leg.",
+    "The bowler bowls a wide delivery, and the batsman manages to get a single from it.",
+    "A defensive shot into the off-side, and the batsman crosses for a quick single.",
+  ],
+  2: [
+    "Quick double there, good running between the wickets.",
+    "They sneaked in for a couple, smart running by the batsmen.",
+    "A swift two runs, putting pressure on the fielding side.",
+    "Batsman showing intent with a brisk double.",
+    "Two on the board, the scoreboard ticking along.",
+    "Well-judged two, keeping the scoreboard moving.",
+    "Batsman quick off the mark, earns a brace.",
+    "Two more to the total, steady accumulation.",
+  ],
+  3: [
+    "Just a quick single there,NO a fumble in the deeps as the batsman rotates the strike for a third.",
+    "A nudge into the leg side, they take off for a couple, and that's three on the board.",
+    "Three runs off the edge, a bit streaky, but the batsman gets away with it.",
+    "A well-timed shot through the covers, they hustle for three.",
+    "Quick running between the wickets turns a solid shot into a triple.",
+    "The batsman flicks it to fine leg and sprints for three, good running between the wickets.",
+    "Three more to the total, just a gentle push into the gap and they scamper through.",
+    "Innovation from the batsman, a deft touch guides the ball to third man for a triple.",
+  ],
+};
+
+export function bowledOutLine(): string {
+  return pick(BOWLED_OUT);
+}
+
+export function sixLine(shot: ShotKind): string {
+  return pick(SIX_LINES[shot]);
+}
+
+export function fourLine(shot: ShotKind): string {
+  return pick(FOUR_LINES[shot]);
+}
+
+export function caughtOutLine(shot: ShotKind): string {
+  return pick(CAUGHT_OUT_LINES[shot]);
+}
+
+export function runLine(runs: 1 | 2 | 3): string {
+  return pick(RUN_LINES[runs]);
+}

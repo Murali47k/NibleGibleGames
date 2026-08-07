@@ -1,0 +1,189 @@
+.odd-even-page main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2rem var(--gutter) 4rem;
+}
+
+.odd-even-page h1 {
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  color: var(--amber);
+  margin: 0 0 0.5rem;
+}
+
+.game-page__intro {
+  color: var(--muted);
+  max-width: 60ch;
+  margin: 0 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+.scoreboard {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.scoreboard[hidden] {
+  display: none;
+}
+
+.scoreboard__score {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--amber);
+}
+
+.scoreboard__meta {
+  display: flex;
+  gap: 0.9rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.scoreboard__role {
+  font-size: 0.7rem;
+  font-family: var(--font-display);
+  color: var(--mint);
+  letter-spacing: 0.5px;
+}
+
+.commentary-box {
+  height: 320px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  background: #0a0b0e;
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  scroll-behavior: smooth;
+}
+
+.commentary-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.commentary-box::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: var(--radius);
+}
+
+.log-line {
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--line);
+}
+
+.log-line--info {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.log-line--commentary {
+  color: var(--text);
+}
+
+.log-line--wicket {
+  color: var(--coral);
+  border-left-color: var(--coral);
+  font-weight: 600;
+}
+
+.log-line--boundary {
+  color: var(--amber);
+  border-left-color: var(--amber);
+  font-weight: 600;
+}
+
+.log-line--result {
+  color: var(--mint);
+  border-left-color: var(--mint);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  padding-top: 0.25rem;
+}
+
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.control-panel__label {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+.control-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.7rem;
+}
+
+.choice-btn {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.85rem 1rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: var(--radius);
+  text-align: left;
+  transition: border-color 0.15s ease, transform 0.12s ease, background 0.15s ease;
+}
+
+.choice-btn:hover {
+  border-color: var(--amber);
+  transform: translateY(-2px);
+  background: var(--panel-raised);
+}
+
+.choice-btn__index {
+  color: var(--amber);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  margin-right: 0.5rem;
+}
+
+.call-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+  max-width: 420px;
+}
+
+.call-btn {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  padding: 1.4rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--text);
+  transition: border-color 0.15s ease, transform 0.12s ease;
+}
+
+.call-btn:hover {
+  border-color: var(--mint);
+  transform: translateY(-2px);
+}
+
+.call-btn--odd {
+  color: var(--amber);
+}
+
+.call-btn--even {
+  color: var(--mint);
+}

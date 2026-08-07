@@ -26,13 +26,13 @@ export const games: GameEntry[] = [
     tag: "WEBCAM",
   },
   {
-    id: "next",
-    title: "???",
-    tagline: "In the workshop",
-    description: "Another weird one is being built. Check back later.",
-    href: "#",
-    thumbnail: "/images/loading-spinner.png",
-    tag: "SOON",
-    comingSoon: true,
+    id: "odd-or-even",
+    title: "ODD or EVEN",
+    tagline: "Call the toss, chase the target",
+    description:
+      "A text-only hand-cricket duel. Call odd or even to win the toss, then bat or bowl your way through a 3-wicket dash with commentary for every ball.",
+    href: "/games/odd-or-even/index.html",
+    thumbnail: "/images/favicon.png",
+    tag: "TEXT",
   },
 ];

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ODD or EVEN — MyGames</title>
+    <meta
+      name="description"
+      content="A text-only hand-cricket duel against the computer. Call the toss, pick your shots, chase the target."
+    />
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+  </head>
+  <body class="game-page odd-even-page">
+    <header class="site-header">
+      <a class="site-header__brand" href="/index.html">
+        <img src="/images/favicon.png" alt="" width="28" height="28" />
+        MYGAMES
+      </a>
+      <a class="site-header__back" href="/index.html">← Back to arcade</a>
+    </header>
+
+    <main>
+      <h1>ODD or EVEN</h1>
+      <p class="game-page__intro">
+        No coin here — call it the street-cricket way. Then bat or bowl your way
+        through a 3-wicket dash, one shot at a time, with commentary for every ball.
+      </p>
+
+      <div class="scoreboard" id="scoreboard" hidden>
+        <div class="scoreboard__score">
+          <span id="sb-runs">0</span>/<span id="sb-wickets">0</span>
+        </div>
+        <div class="scoreboard__meta">
+          <span id="sb-balls">0 balls</span>
+          <span id="sb-target" hidden></span>
+        </div>
+        <div class="scoreboard__role" id="sb-role"></div>
+      </div>
+
+      <section class="commentary-box" id="commentary-box" aria-live="polite"></section>
+
+      <section class="control-panel" id="control-panel"></section>
+    </main>
+
+    <footer class="site-footer">
+      Every ball is decided the moment you play it — nothing is saved between rounds.
+    </footer>
+
+    <script type="module" src="/src/games/odd-or-even/main.ts"></script>
+  </body>
+</html>
