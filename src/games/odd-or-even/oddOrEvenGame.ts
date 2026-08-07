@@ -11,6 +11,7 @@ import {
   caughtOutLine,
   runLine,
   runOutLine,
+  milestoneLine,
 } from "./commentary";
 
 export type Call = "odd" | "even";
@@ -275,6 +276,7 @@ export class OddOrEvenGame {
       }
     }
 
+    const runsBeforeThisBall = this.runs;
     this.balls += 1;
     this.runs += runsScored;
     if (isWicket) this.wickets += 1;
@@ -304,6 +306,15 @@ export class OddOrEvenGame {
       `Score: ${this.runs}/${this.wickets} after ${this.balls} ball${this.balls === 1 ? "" : "s"}.`,
       "info"
     );
+
+    // Score-based milestone commentary — fires every time the total crosses
+    // a multiple of 50 (50, 100, 150, ...).
+    const prevMilestone = Math.floor(runsBeforeThisBall / 50);
+    const newMilestone = Math.floor(this.runs / 50);
+    if (newMilestone > prevMilestone && newMilestone > 0) {
+      const battingTeam = this.playerBatting ? "You" : "The computer";
+      this.push(milestoneLine(newMilestone * 50, battingTeam), "result");
+    }
 
     this.checkInningsEnd();
 
@@ -345,7 +356,7 @@ export class OddOrEvenGame {
 
   private buildResultLine(): string {
     if (this.winner === "tie") return "It's a TIE! What a way for this one to finish.";
-    if (this.winner === "player") return "YOU WIN! Take a bow — that was a superb chase.";
+    if (this.winner === "player") return "YOU WIN! Take a bow — that was a superb.";
     return "THE COMPUTER WINS. Better luck next time — call for a rematch!";
   }
 

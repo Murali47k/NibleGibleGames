@@ -1,5 +1,5 @@
 .odd-even-page main {
-  max-width: 760px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 2rem var(--gutter) 4rem;
 }
@@ -15,6 +15,35 @@
   max-width: 60ch;
   margin: 0 0 1.5rem;
   font-size: 0.9rem;
+}
+
+.how-to-play {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.85rem;
+  margin-top: 1.75rem;
+}
+
+.how-to-play__item {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+}
+
+.how-to-play__item h3 {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+  color: var(--mint);
+  margin: 0 0 0.5rem;
+}
+
+.how-to-play__item p {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--muted);
+  margin: 0;
 }
 
 .scoreboard {
@@ -186,4 +215,31 @@
 
 .call-btn--even {
   color: var(--mint);
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  text-align: center;
+  padding: 0.95rem 1.2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--mint);
+  background: var(--mint);
+  color: #06110d;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  filter: brightness(1.05);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
