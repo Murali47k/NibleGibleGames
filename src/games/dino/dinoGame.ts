@@ -22,8 +22,6 @@ interface ObstacleDef {
   laneY: number;
   /** Sprite width/height as a fraction of stage width — kept square. */
   size: number;
-  /** Landmark pair the player must keep clear of this obstacle. */
-  hitZone: LandmarkPair;
   src: string;
 }
 
@@ -32,21 +30,18 @@ const OBSTACLES: ObstacleDef[] = [
     kind: "flyer",
     laneY: 0.26,
     size: 0.14,
-    hitZone: [LEFT_SHOULDER, RIGHT_SHOULDER],
     src: "/images/flying-dino.png",
   },
   {
     kind: "cactus-small",
-    laneY: 0.78,
+    laneY: 0.86,
     size: 0.12,
-    hitZone: [LEFT_HIP, RIGHT_HIP],
     src: "/images/cactus-small.png",
   },
   {
     kind: "cactus-tall",
-    laneY: 0.76,
+    laneY: 0.84,
     size: 0.16,
-    hitZone: [LEFT_HIP, RIGHT_HIP],
     src: "/images/cactus-tall.png",
   },
 ];
@@ -286,23 +281,42 @@ export class DinoGame {
   private checkCollision(): boolean {
     if (!this.obstacle || !this.lastLandmarks) return false;
 
-    const [a, b] = this.obstacle.def.hitZone;
-    const pointA = this.lastLandmarks[a];
-    const pointB = this.lastLandmarks[b];
-    if (!pointA || !pointB) return false;
+    const playerBox = this.getPlayerHitBox();
+    if (!playerBox) return false;
 
-    const centerX = ((pointA.x + pointB.x) / 2) * this.canvas.width;
-    const centerY = ((pointA.y + pointB.y) / 2) * this.canvas.height;
+    const obstacleBox = {
+      minX: this.obstacle.x + HIT_TOLERANCE_PX,
+      maxX: this.obstacle.x + this.obstacle.size - HIT_TOLERANCE_PX,
+      minY: this.obstacle.y - this.obstacle.size / 2 + HIT_TOLERANCE_PX,
+      maxY: this.obstacle.y + this.obstacle.size / 2 - HIT_TOLERANCE_PX,
+    };
 
-    const obstacleCenterX = this.obstacle.x + this.obstacle.size / 2;
-    const obstacleCenterY = this.obstacle.y;
+    return (
+      playerBox.minX <= obstacleBox.maxX &&
+      playerBox.maxX >= obstacleBox.minX &&
+      playerBox.minY <= obstacleBox.maxY &&
+      playerBox.maxY >= obstacleBox.minY
+    );
+  }
 
-    const dx = centerX - obstacleCenterX;
-    const dy = centerY - obstacleCenterY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+  private getPlayerHitBox(): { minX: number; maxX: number; minY: number; maxY: number } | null {
+    const landmarks = this.lastLandmarks;
+    if (!landmarks) return null;
 
-    const threshold = this.obstacle.size / 2 + HIT_TOLERANCE_PX;
-    return distance <= threshold;
+    const corners = [LEFT_SHOULDER, RIGHT_SHOULDER, LEFT_HIP, RIGHT_HIP].map(
+      (idx) => landmarks[idx]
+    );
+    if (corners.some((p) => !p)) return null;
+
+    const xs = corners.map((p) => p!.x * this.canvas.width);
+    const ys = corners.map((p) => p!.y * this.canvas.height);
+
+    return {
+      minX: Math.min(...xs),
+      maxX: Math.max(...xs),
+      minY: Math.min(...ys),
+      maxY: Math.max(...ys),
+    };
   }
 
   private draw(): void {
@@ -310,6 +324,7 @@ export class DinoGame {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     this.drawSkeleton();
+    this.drawPlayerHitBox();
 
     if (this.obstacle) {
       const sprite = this.sprites.get(this.obstacle.def.kind);
@@ -323,6 +338,18 @@ export class DinoGame {
         );
       }
     }
+  }
+
+  private drawPlayerHitBox(): void {
+    const box = this.getPlayerHitBox();
+    if (!box) return;
+    const { ctx } = this;
+    ctx.save();
+    ctx.strokeStyle = "rgba(255, 0, 110, 0.6)";
+    ctx.setLineDash([6, 4]);
+    ctx.lineWidth = 2;
+    ctx.strokeRect(box.minX, box.minY, box.maxX - box.minX, box.maxY - box.minY);
+    ctx.restore();
   }
 
   private drawSkeleton(): void {
