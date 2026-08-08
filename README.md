@@ -4,7 +4,9 @@ NibleGibleGames is a small collection of weird, replayable browser games. Each g
 
 No login, database, or leaderboard — just simple games you can pick up and play.
 
-## Cartridges
+---
+
+## **Cartridges**
 
 ### IRL-DINO
 
