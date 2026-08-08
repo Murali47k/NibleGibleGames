@@ -34,6 +34,15 @@ export const games: GameEntry[] = [
     href: "/games/odd-or-even/index.html",
     thumbnail: "/images/odd_or_even.png",
     tag: "TEXT",
+  },{
+    id: "irl-hoops",
+    title: "IRL-HOOPS",
+    tagline: "Your hand is the ball handler",
+    description:
+      "Grab a real-physics basketball with your tracked hand and sling it at the hoop. Speed and direction come straight from your throw — 60 seconds on the shot clock.",
+    href: "/games/irl-hoops/index.html",
+    thumbnail: "/images/basketball.png",
+    tag: "WEBCAM",
   },
   {
     id: "ongoing-project",

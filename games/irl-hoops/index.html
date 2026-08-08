@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IRL-HOOPS — MyGames</title>
+    <meta
+      name="description"
+      content="Grab the ball with your bare hand and sink baskets against the shot clock. Real physics, your real arm."
+    />
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+  </head>
+  <body class="game-page">
+    <header class="site-header">
+      <a class="site-header__brand" href="/index.html">
+        <img src="/images/favicon.png" alt="" width="28" height="28" />
+        MYGAMES
+      </a>
+      <a class="site-header__back" href="/index.html">← Back to arcade</a>
+    </header>
+
+    <main>
+      <h1>IRL-HOOPS</h1>
+      <p class="game-page__intro">
+        Your hand is the ball handler. Reach for the ball, swing your arm toward the hoop,
+        and let go — the throw's speed and direction come straight from your motion. Real
+        gravity, real bounces, no controller.
+      </p>
+
+      <div class="stage" id="stage">
+        <div class="mirror-wrap">
+          <video id="camera" playsinline autoplay muted></video>
+          <canvas id="game-canvas"></canvas>
+        </div>
+
+        <div class="hud">
+          <div class="hud__group">
+            <span class="hud__label">SCORE</span>
+            <span id="score-value">0</span>
+          </div>
+          <div class="hud__group">
+            <span class="hud__label">TIME</span>
+            <span id="time-value">60</span>
+          </div>
+        </div>
+
+        <div class="shot-toast" id="shot-toast" hidden></div>
+
+        <section class="stage-overlay" id="overlay-start">
+          <h2>Ready your webcam</h2>
+          <p>
+            This game tracks your hand to move and throw the ball. Nothing is
+            recorded or sent anywhere — it all runs in this browser tab. Stand
+            back far enough that your whole arm is in frame.
+          </p>
+          <button class="btn" id="btn-start">Enable camera &amp; play</button>
+        </section>
+
+        <section class="stage-overlay stage-overlay--gameover" id="overlay-gameover" hidden>
+          <h2>TIME'S UP</h2>
+          <p class="score-line"><span id="final-score">0</span> made</p>
+          <p id="final-stats"></p>
+          <button class="btn" id="btn-restart">Play again</button>
+        </section>
+
+        <p class="stage-status" id="stage-status" hidden>
+          <img class="stage-status__spinner" src="/images/loading-spinner.png" alt="" width="18" height="18" />
+          <span id="stage-status-text">Loading hand model…</span>
+        </p>
+      </div>
+
+      <div class="how-to-play">
+        <div class="how-to-play__item">
+          <h3>GRAB IT</h3>
+          <p>Move your open hand near the ball resting on the court — it locks on when you're close.</p>
+        </div>
+        <div class="how-to-play__item">
+          <h3>WIND UP</h3>
+          <p>Pull your hand back, then drive it toward the hoop — speed and direction both carry over to the throw.</p>
+        </div>
+        <div class="how-to-play__item">
+          <h3>LET GO</h3>
+          <p>Pull your hand away from the ball fast enough and it releases — mid swing, right where you want it.</p>
+        </div>
+        <div class="how-to-play__item">
+          <h3>60 SECONDS</h3>
+          <p>The ball resets itself after every shot. Grab, throw, repeat — see how many you can sink.</p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      Hand tracking runs entirely in your browser. Nothing is uploaded.
+    </footer>
+
+    <script type="module" src="/src/games/irl-hoops/main.ts"></script>
+  </body>
+</html>

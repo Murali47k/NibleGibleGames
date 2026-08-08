@@ -15,6 +15,7 @@ export default defineConfig({
         home: resolve(__dirname, "index.html"),
         dino: resolve(__dirname, "games/dino/index.html"),
         oddOrEven: resolve(__dirname, "games/odd-or-even/index.html"),
+        irlHoops: resolve(__dirname, "games/irl-hoops/index.html"),
       },
     },
   },
