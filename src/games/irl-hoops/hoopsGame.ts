@@ -184,7 +184,7 @@ export class HoopsGame {
     const w = this.canvas.width;
     const h = this.canvas.height;
     const ballRadius = w * 0.045;
-    const rimCenterX = w * 0.76;
+    const rimCenterX = w * 0.86;
     const rimHalfWidth = w * 0.085;
 
     this.court = {
