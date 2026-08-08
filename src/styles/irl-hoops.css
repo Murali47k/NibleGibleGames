@@ -31,6 +31,33 @@
   box-shadow: 0 0 0 1px rgba(255, 183, 3, 0.08), 0 30px 60px -30px rgba(0, 0, 0, 0.8);
 }
 
+/* Soft vignette so the edges of the webcam feed recede and attention stays
+   on the court/ball in the center. Purely decorative — never blocks input. */
+.stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+/* Brief warm pulse across the whole stage the instant a shot goes in. */
+.stage--flash {
+  animation: stage-flash 0.4s ease;
+}
+
+@keyframes stage-flash {
+  0% {
+    box-shadow:
+      0 0 0 1px rgba(255, 183, 3, 0.08),
+      0 30px 60px -30px rgba(0, 0, 0, 0.8),
+      0 0 46px 8px rgba(6, 214, 160, 0.4) inset;
+  }
+  100% {
+    box-shadow: 0 0 0 1px rgba(255, 183, 3, 0.08), 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+  }
+}
+
 /* Video and canvas share one mirrored wrapper so the tracked hand overlay
    stays pixel-aligned with the camera feed instead of mirroring independently. */
 .mirror-wrap {
@@ -64,12 +91,14 @@
   font-size: 0.85rem;
   color: var(--amber);
   background: rgba(13, 15, 18, 0.55);
+  backdrop-filter: blur(6px);
   border: 1px solid var(--line);
   padding: 0.5rem 0.9rem;
   border-radius: var(--radius);
   letter-spacing: 1px;
   display: flex;
   gap: 1.1rem;
+  z-index: 1;
 }
 
 .hud span {
@@ -93,6 +122,26 @@
 .hud__group #time-value {
   font-size: 1rem;
   color: var(--amber);
+  display: inline-block;
+}
+
+/* Score pop: brief bounce-and-glow whenever a bucket lands. */
+#score-value.hud-pop {
+  animation: hud-score-pop 0.45s ease;
+}
+
+@keyframes hud-score-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.4);
+    color: var(--mint);
+  }
+  100% {
+    transform: scale(1);
+    color: var(--amber);
+  }
 }
 
 /* Short-lived flavor line ("SWISH!", "So close!") that pops in near the
@@ -105,6 +154,7 @@
   font-size: 0.75rem;
   color: var(--mint);
   background: rgba(13, 15, 18, 0.55);
+  backdrop-filter: blur(6px);
   border: 1px solid var(--line);
   padding: 0.5rem 0.8rem;
   border-radius: var(--radius);
@@ -112,6 +162,7 @@
   transform: translateY(-6px);
   transition: opacity 0.2s ease, transform 0.2s ease;
   max-width: 60%;
+  z-index: 1;
 }
 
 .shot-toast--visible {
@@ -121,6 +172,15 @@
 
 .shot-toast--miss {
   color: var(--coral);
+}
+
+/* Streak / combo callouts get a warmer, flame-tinted treatment so they
+   read as an escalation rather than another ordinary toast. */
+.shot-toast--combo {
+  color: var(--amber);
+  background: linear-gradient(135deg, rgba(255, 183, 3, 0.2), rgba(255, 93, 115, 0.12)), rgba(13, 15, 18, 0.55);
+  border-color: rgba(255, 183, 3, 0.45);
+  text-shadow: 0 0 8px rgba(255, 183, 3, 0.5);
 }
 
 .stage-overlay {
@@ -135,6 +195,7 @@
   padding: 2rem;
   background: rgba(13, 15, 18, 0.86);
   backdrop-filter: blur(2px);
+  z-index: 2;
 }
 
 .stage-overlay[hidden] {
@@ -180,6 +241,26 @@
   transform: translateY(-1px);
 }
 
+/* Gentle invite pulse on the primary action buttons (start / play again)
+   so the stage doesn't feel inert while waiting for input. */
+.btn:not(.btn--ghost) {
+  animation: btn-invite 2.4s ease-in-out infinite;
+}
+
+.btn:not(.btn--ghost):hover {
+  animation: none;
+}
+
+@keyframes btn-invite {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(6, 214, 160, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 9px rgba(6, 214, 160, 0);
+  }
+}
+
 .btn--ghost {
   background: transparent;
   border-color: var(--line);
@@ -200,6 +281,7 @@
   border: 1px solid var(--line);
   padding: 0.4rem 0.65rem;
   border-radius: var(--radius);
+  z-index: 1;
 }
 
 .stage-status__spinner {
@@ -238,4 +320,16 @@
   margin: 0;
   font-size: 0.82rem;
   color: var(--muted);
+}
+
+/* Respect reduced-motion preferences: kill the ambient pulses/animations,
+   the core game (canvas-driven) is unaffected since it isn't a11y-gated. */
+@media (prefers-reduced-motion: reduce) {
+  .btn:not(.btn--ghost) {
+    animation: none;
+  }
+  .stage--flash,
+  #score-value.hud-pop {
+    animation: none;
+  }
 }
